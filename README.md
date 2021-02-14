@@ -3,7 +3,7 @@ geoJSON to gpx (and vice versa) converters.
 
 Queries from https://overpass-turbo.eu/  and JOSM can be exported to geoJSON.
 
-Queries from muncipal opendata can be exported as geoJSON (most of the times).
+Queries from municipal opendata can be exported as geoJSON (most of the times).
 
 This library is a collection of converters between geoJSON and gpx formats.
 
