@@ -39,6 +39,5 @@ for route in gpx.routes:
     my_feature = Feature(geometry=my_line, properties={"name":varname})
     basket.append(my_feature)   
 
-feature_collection = FeatureCollection(basket)
-print ( feature_collection )
+print ( FeatureCollection(basket) )
 
