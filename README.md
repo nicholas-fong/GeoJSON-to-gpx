@@ -20,7 +20,7 @@ $python geo2wpt.py mytrail   (only extract Point and Polygon and map to gpx wayp
 $python gpx2geo.py mygpx     (waypoint is mapped to Point; route and track are mapped to LineString)
 ```
 ### An ultra simple use case
-Download my city's Open Data database of drinking fountains as a GeoJSON file.
+Download a city's Open Data database of drinking fountains as a GeoJSON file.
 ```
 $python geo2gpx.py fountains > my-city-fountains.gpx
 import my-city-fountains.gpx to a mobile phone or portable navigation device .
