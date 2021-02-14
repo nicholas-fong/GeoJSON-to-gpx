@@ -19,6 +19,9 @@ $python geo2trk.py mytrail   (only extract LineString elements in GeoJSON and ma
 $python geo2wpt.py mytrail   (only extract Point and Polygon and map to gpx waypoint, Polygon centroid is used for waypoint)
 $python gpx2geo.py mygpx     (waypoint is mapped to Point; route and track are mapped to LineString)
 ```
+- changing Polygon to a single waypoint is not an ideal strategy, but is good enough for tourism use.
+- there is no explicit placeholder in geoJSON for elevation, they are simply discarded.
+
 ### An ultra simple use case
 Download a city's Open Data database of drinking fountains as a GeoJSON file.
 ```
