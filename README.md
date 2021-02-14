@@ -9,6 +9,8 @@ This library is a collection of converters between geoJSON and gpx formats.
 
 The output of these converters is always to STDOUT to allow felxibility of using shell pipes.
 
+The main advantage of geoJSON is that it can be edited by Java OpenStreetMap Editor.
+
 ## examples:
 ```
 $python geo2gpx.py myhouse   (myhouse is a GeoJSON file with file extension .geojson)
