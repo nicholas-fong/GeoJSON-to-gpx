@@ -3,7 +3,7 @@ geoJSON to gpx (and vice versa) converters.
 
 - Overpass Queries https://overpass-turbo.eu/ can be exported as geoJSON.
 
-- Java OpenStreetMap editor (JOSM) can exported as geoJSON.
+- Java OpenStreetMap editor [JOSM](https://josm.openstreetmap.de/) can exported as geoJSON.
 
 - Municipality Open Data can be exported as geoJSON.
 
