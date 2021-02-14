@@ -11,9 +11,7 @@ This repository is a collection of converters between geoJSON and gpx formats.
 
 The output of these converters is directed to stdout to allow felxibility of pipes.
 
-The advantage of geoJSON is that it can be easily edited by Java OpenStreetMap Editor (JOSM).
-
-## Examples
+### Examples
 ```
 $python geo2gpx.py myhouse   (myhouse is a GeoJSON file with file extension .geojson)
 $python geo2gpx.py myhouse > myhouse.gpx (save to a gpx file: Point, Polygon centroid -> gpx waypoint; LineString -> gpx track)
