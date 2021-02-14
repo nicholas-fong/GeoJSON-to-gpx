@@ -1,15 +1,17 @@
 ## geoJSON-gpx-converters
 geoJSON to gpx (and vice versa) converters.
 
-Queries from https://overpass-turbo.eu/  and JOSM can be exported to geoJSON.
+Overpass Queries https://overpass-turbo.eu/ can be exported as geoJSON.
+
+Java OpenStreetMap editor (JOSM) can exported as geoJSON.
 
 Queries from municipal Open Data can be exported as geoJSON (most of the times).
 
-This library is a collection of converters between geoJSON and gpx formats.
+This repository is a collection of converters between geoJSON and gpx formats.
 
-The output of these converters is always to STDOUT to allow felxibility of using shell pipes.
+The output of these converters is directed to stdout to allow felxibility of pipes and filters.
 
-The main advantage of geoJSON is that it can be edited by Java OpenStreetMap Editor.
+The advantage of geoJSON is that it can be easily edited by Java OpenStreetMap Editor (JOSM).
 
 ## Examples
 ```
