@@ -23,7 +23,7 @@ $python gpx2geo.py mygpx     (waypoint is mapped to Point; route and track are m
 ```
 - transforming GeoJSON Polygon to a single gpx waypoint is not an ideal strategy, but is good enough for general tourism use.
 - there is no explicitly defined placeholder for elevation in RFC 7946 geoJSON (elevation MAY be included as an optional geometry: coordinates[2]); my design decision is to discard elevations for now. It may be added in a later date.
-- to add elevation back to gpx, use [gpx-add-SRTM-elevation](https://github.com/nicholas-fong/gpx-add-SRTM-elevation)
+- to add elevation to gpx, use [gpx-add-SRTM-elevation](https://github.com/nicholas-fong/gpx-add-SRTM-elevation)
 
 ### An ultra simple use case
 Download a city's Open Data database of drinking fountains as a GeoJSON file.
