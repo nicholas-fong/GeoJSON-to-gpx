@@ -7,7 +7,7 @@ geoJSON to gpx (and vice versa) converters.
 
 - Municipality Open Data can be exported as geoJSON.
 
-This repository is a collection of converters between geoJSON and gpx formats.
+This repository is a collection of bidirectional converters between geoJSON and gpx formats.
 
 The output of these converters is directed to stdout to allow felxibility of pipes.
 
