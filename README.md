@@ -22,7 +22,7 @@ $python geo2wpt.py mytrail   (only extract Point and Polygon elements and map th
 $python gpx2geo.py mygpx     (waypoint is mapped to Point; route and track are mapped to LineString)
 ```
 - transforming GeoJSON Polygon to a single gpx waypoint is not an ideal strategy, but is good enough for general tourism use.
-- there is no strictly defined placeholder for elevation in RFC 7946: elevation MAY be included as an option. BRouter adds elevation to ['geometry']['coordinates'][2], but gdal-ogr2ogr adds elevation to ['properties']['ele']; my design choice is to discard elevations for now to avoid inconsistencies and conflicts. It may be added in a later date.
+- there is no strictly defined placeholder for elevation in RFC 7946: elevation MAY be included as an option. BRouter adds elevation to ['geometry']['coordinates'][2], but gdal-ogr2ogr adds elevation to ['properties']['ele']. My design choice is to discard elevations for now to avoid inconsistencies and conflicts. It may be added in a later date.
 - to add elevation to gpx, use [gpx-add-SRTM-elevation](https://github.com/nicholas-fong/gpx-add-SRTM-elevation)
 
 ### An ultra simple use case
