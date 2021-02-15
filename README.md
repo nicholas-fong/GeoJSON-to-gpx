@@ -16,12 +16,12 @@ The output of these converters is directed to stdout to allow felxibility of pip
 $python geo2gpx.py myhouse   (myhouse is a GeoJSON file with file extension .geojson)
 $python geo2gpx.py myhouse > myhouse.gpx (save to a gpx file: Point, Polygon centroid -> gpx waypoint; LineString -> gpx track)
 $python geo2trk.py mytrail   (only extract LineString elements in GeoJSON and map them to a gpx track)
-$python geo2wpt.py mytrail   (only extract Point and Polygon and map to gpx waypoint, Polygon centroid is used for waypoint)
+$python geo2wpt.py mytrail   (only extract Point and Polygon elements and map them to gpx waypoint; Polygon's centroid is used as waypoint)
 $python gpx2geo.py mygpx     (waypoint is mapped to Point; route and track are mapped to LineString)
 ```
-- changing Polygon to a single waypoint is not an ideal strategy, but is good enough for tourism use.
-- there is no explicit placeholder in geoJSON for elevation, my design decision is to discarded elevations.
-- to add elevation to gpx file, use [gpx-add-SRTM-elevation](https://github.com/nicholas-fong/gpx-add-SRTM-elevation)
+- transforming Polygon to a single waypoint is not an ideal strategy, but is good enough for tourism use.
+- there is no explicitly defined placeholder in geoJSON for elevation: my design decision is to discarded elevations.
+- to add elevation to gpx, use [gpx-add-SRTM-elevation](https://github.com/nicholas-fong/gpx-add-SRTM-elevation)
 
 ### An ultra simple use case
 Download a city's Open Data database of drinking fountains as a GeoJSON file.
