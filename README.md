@@ -26,9 +26,10 @@ $python gpx2geo.py mygpx     (waypoint is mapped to Point; route and track are m
 - There is no strictly defined placeholder for elevation in RFC 7946: "elevation MAY be included as an option". For example, BRouter adds elevation to ['geometry']['coordinates'][2], but gdal-ogr2ogr adds elevation to ['properties']['ele']. My design choice is to discard elevations for now to avoid inconsistencies and conflicts. It may be added in a later date.
 - To add elevation to gpx, use [gpx-add-SRTM-elevation](https://github.com/nicholas-fong/gpx-add-SRTM-elevation)
 
-### An ultra simple use case
-Download a city's Open Data database of drinking fountains as a GeoJSON file.
+### A simple use case
+Download a city's Open Data database of drinking fountains (e.g. fountains.geojson)
 ```
-$python geo2gpx.py fountains > my-city-fountains.gpx
-transfer my-city-fountains.gpx to a mobile phone or portable navigation device .
+$python geo2gpx.py fountains > fountains.gpx
+(if you have gdal-bin installed)
+org2org -f 'KML' -a_srs EPSG:4326 fountains.kml fountains.geojson
 ```
