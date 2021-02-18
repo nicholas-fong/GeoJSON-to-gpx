@@ -1,4 +1,4 @@
-## geoJSON-gpx-converters
+## geoJSON-gpx-convert
 A collection of geoJSON to gpx converters (and vice versa).
 
 - Overpass Queries https://overpass-turbo.eu/ can be exported as geoJSON.
