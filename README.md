@@ -30,6 +30,9 @@ $python gpx2geo.py mygpx     (waypoint is mapped to Point; route and track are m
 Download a city's Open Data database of drinking fountains (e.g. fountains.geojson)
 ```
 $python geo2gpx.py fountains > fountains.gpx
-(if you have gdal-bin installed and want kml instead of gpx)
+```
+## GeoJSON to KML conversion
+First, install gdal-bin
+```
 org2org -f 'KML' -a_srs EPSG:4326 fountains.kml fountains.geojson
 ```
