@@ -1,6 +1,6 @@
 # gpx waypoint is mapped to geoJSON Point
 # gpx routes and tracks are mapped to geojson LineString
-# gpx elevation is added as the third parameter in geometry
+# gpx elevation if exists is added as the third parameter in geometry
 
 import sys
 import gpxpy
@@ -16,9 +16,12 @@ basket = []
 for waypoint in gpx.waypoints:
     lat = float(waypoint.latitude)
     lon = float(waypoint.longitude)
-    ele = int(waypoint.elevation)
     varname = waypoint.name
-    my_point = Point((lon, lat, ele))
+    if waypoint.elevation is None:
+        my_point = Point((lon, lat))
+    else:
+        my_point = Point((lon, lat, waypoint.elevation))
+
     my_feature = Feature(geometry=my_point, properties={"name":varname})
     basket.append(my_feature)    
 
@@ -27,7 +30,10 @@ for track in gpx.tracks:
     for segment in track.segments:
         array=[]
         for point in segment.points:
-            array.append( (point.longitude, point.latitude, point.elevation) )
+            if point.elevation is None:
+                array.append( (point.longitude, point.latitude) )
+            else:
+                array.append( (point.longitude, point.latitude, point.elevation))
         my_line = LineString(array)
         my_feature = Feature(geometry=my_line, properties={"name":varname})
         basket.append(my_feature)   
@@ -36,7 +42,10 @@ for route in gpx.routes:
     varname = route.name
     array=[]
     for point in route.points:
-        array.append( (point.longitude, point.latitude, point.elevation) )    
+        if point.elevation is None:
+            array.append( (point.longitude, point.latitude) )    
+        else:
+            array.append( (point.longitude, point.latitude, point.elevation) ) 
     my_line = LineString(array)
     my_feature = Feature(geometry=my_line, properties={"name":varname})
     basket.append(my_feature)   
