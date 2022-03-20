@@ -18,11 +18,11 @@ for i in range(len(data['features'])):
     if ( geom['type'] == 'Point' ):
         gpx_wps = gpxpy.gpx.GPXWaypoint()
         apple = data['features'][i]['properties']
-        if ( apple.setdefault('name','noname') != 'noname' ): 
+        if ( apple.setdefault('name','AAA') != 'AAA' ): 
             gpx_wps.name = apple['name']
-        elif ( apple.setdefault('tourism','notour') != 'notour' ):
+        elif ( apple.setdefault('tourism','BBB') != 'BBB' ):
             gpx_wps.name = apple['tourism']
-        elif ( apple.setdefault('amenity','noamen') != 'noamen' ):
+        elif ( apple.setdefault('amenity','CCC') != 'CCC' ):
             gpx_wps.name = apple['amenity']
         else:   
             gpx_wps.name = 'noname'
