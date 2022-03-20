@@ -1,8 +1,8 @@
-# https://overpass-turbo.eu/ exports GeoJSON
-# josm can also export to GeoJSON
-# convert GeoJSON Points to gpx waypoints
-# convert GeoJSON Polygons to a single gpx waypoint based on centroid of the polygon vertices
-# convert GeoJSON LineStrings to a gpx track
+# https://overpass-turbo.eu/ exports query result to GeoJSON format.
+# Note: JOSM can read GeoJSON format.
+# convert GeoJSON Points to gpx waypoints, add elevation if exists
+# convert GeoJSON LineStrings to a gpx track, add elevation if exists.
+# convert GeoJSON Polygons to a gpx waypoint based on centroid of the polygon vertices, no elevtation.
 
 import sys
 from statistics import mean
@@ -26,12 +26,42 @@ for i in range(len(data['features'])):
             varname = apple['amenity']
         else:
             varname = 'noname'
-        gpx_wps.latitude = geom['coordinates'][1]
-        gpx_wps.longitude = geom['coordinates'][0]
         if ( varname != 'noname'):
             gpx_wps.name = varname
-        gpx.waypoints.append(gpx_wps)
             
+        if geom['coordinates'][2] is None:    
+            gpx_wps.latitude = geom['coordinates'][1]
+            gpx_wps.longitude = geom['coordinates'][0]
+        else:
+            gpx_wps.latitude = geom['coordinates'][1]
+            gpx_wps.longitude = geom['coordinates'][0]
+            gpx_wps.elevation = geom['coordinates'][2]
+            
+        gpx.waypoints.append(gpx_wps)
+
+    if ( data['features'][i]['geometry']['type'] == 'LineString' ):
+        apple = data['features'][i]['properties']
+        if ( apple.setdefault('name','noname') != 'noname' ): 
+            varname = apple['name']
+        elif ( apple.setdefault('tourism','notour') != 'notour' ):
+            varname = apple['tourism']
+        else:
+            varname = 'noname'
+        if ( varname == 'noname' ):
+            gpx_track = gpxpy.gpx.GPXTrack()
+        else:    
+            gpx_track = gpxpy.gpx.GPXTrack(varname)
+        gpx.tracks.append(gpx_track)
+        gpx_segment = gpxpy.gpx.GPXTrackSegment()
+        gpx_track.segments.append(gpx_segment)
+        node = data['features'][i]['geometry']['coordinates']
+        gpx_point=gpxpy.gpx.GPXTrackPoint()
+        for j in range(len(node)):
+            if geom['coordinates'][2] is None:
+                gpx_segment.points.append(gpxpy.gpx.GPXTrackPoint(node[j][1], node[j][0] ))
+            else:
+                gpx_segment.points.append(gpxpy.gpx.GPXTrackPoint(node[j][1], node[j][0], node[j][2] ))
+                
     if ( geom['type'] == 'Polygon' ):
         gpx_wps = gpxpy.gpx.GPXWaypoint()
         node = data['features'][i]['geometry']['coordinates'][0]
@@ -51,30 +81,11 @@ for i in range(len(data['features'])):
             varname = apple['amenity']
         else:
             varname = 'noname'
-        gpx_wps.latitude = lat
-        gpx_wps.longitude = lon
         if ( varname != 'noname'):
             gpx_wps.name = varname
+        gpx_wps.latitude = lat
+        gpx_wps.longitude = lon
+        
         gpx.waypoints.append(gpx_wps)
             
-    if ( data['features'][i]['geometry']['type'] == 'LineString' ):
-        apple = data['features'][i]['properties']
-        if ( apple.setdefault('name','noname') != 'noname' ): 
-            varname = apple['name']
-        elif ( apple.setdefault('tourism','notour') != 'notour' ):
-            varname = apple['tourism']
-        else:
-            varname = 'noname'
-        if ( varname == 'noname' ):
-            gpx_track = gpxpy.gpx.GPXTrack()
-        else:    
-            gpx_track = gpxpy.gpx.GPXTrack(varname)
-        gpx.tracks.append(gpx_track)
-        gpx_segment = gpxpy.gpx.GPXTrackSegment()
-        gpx_track.segments.append(gpx_segment)
-        node = data['features'][i]['geometry']['coordinates']
-        gpx_point=gpxpy.gpx.GPXTrackPoint()
-        for j in range(len(node)):
-            gpx_segment.points.append(gpxpy.gpx.GPXTrackPoint(node[j][1], node[j][0] ))
-
 print( gpx.to_xml() )
