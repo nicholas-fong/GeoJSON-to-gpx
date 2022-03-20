@@ -19,15 +19,13 @@ for i in range(len(data['features'])):
         gpx_wps = gpxpy.gpx.GPXWaypoint()
         apple = data['features'][i]['properties']
         if ( apple.setdefault('name','noname') != 'noname' ): 
-            varname = apple['name']
+            gpx_wps.name = apple['name']
         elif ( apple.setdefault('tourism','notour') != 'notour' ):
-            varname = apple['tourism']
+            gpx_wps.name = apple['tourism']
         elif ( apple.setdefault('amenity','noamen') != 'noamen' ):
-            varname = apple['amenity']
-        else:
-            varname = 'noname'
-        if ( varname != 'noname'):
-            gpx_wps.name = varname
+            gpx_wps.name = apple['amenity']
+        else:   
+            gpx_wps.name = 'noname'
 
         if  (len(geom['coordinates'])) == 2:
             gpx_wps.latitude = geom['coordinates'][1]
@@ -41,12 +39,12 @@ for i in range(len(data['features'])):
 
     if ( data['features'][i]['geometry']['type'] == 'LineString' ):
         apple = data['features'][i]['properties']
-        if ( apple.setdefault('name','noname') != 'noname' ): 
+        if ( apple.setdefault('name','BBB') != 'BBB' ): 
             gpx_track = gpxpy.gpx.GPXTrack(apple['name'])
-        elif ( apple.setdefault('tourism','notour') != 'notour' ):
+        elif ( apple.setdefault('tourism','CCC') != 'CCC' ):
             gpx_track = gpxpy.gpx.GPXTrack(apple['tourism'])
         else:
-            gpx_track = gpxpy.gpx.GPXTrack()
+            gpx_track = gpxpy.gpx.GPXTrack('noname')
 
         gpx.tracks.append(gpx_track)
         gpx_segment = gpxpy.gpx.GPXTrackSegment()
@@ -68,13 +66,15 @@ for i in range(len(data['features'])):
             bucket1.append( node[j][1] )
             bucket2.append( node[j][0] )
         apple = data['features'][i]['properties']
-        if ( apple.setdefault('name','noname') != 'noname' ): 
+        if ( apple.setdefault('name','AAA') != 'AAA' ): 
             gpx_wps.name = apple['name']
-        elif ( apple.setdefault('tourism','notour') != 'notour' ):
+        elif ( apple.setdefault('tourism','BBB') != 'BBB' ):
             gpx_wps.name = apple['tourism']
-        elif ( apple.setdefault('amenity','noamen') != 'noamen' ):
+        elif ( apple.setdefault('amenity','CCC') != 'CCC' ):
             gpx_wps.name = apple['amenity']
-        
+        else:     
+            gpx_wps.name = 'noname'
+            
         gpx_wps.latitude = mean(bucket1)
         gpx_wps.longitude = mean(bucket2)
         
