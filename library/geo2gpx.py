@@ -70,21 +70,16 @@ for i in range(len(data['features'])):
         for j in range(len(node)):
             bucket1.append( node[j][1] )
             bucket2.append( node[j][0] )
-        lat = mean(bucket1)
-        lon = mean(bucket2)
         apple = data['features'][i]['properties']
         if ( apple.setdefault('name','noname') != 'noname' ): 
-            varname = apple['name']
+            gpx_wps.name = apple['name']
         elif ( apple.setdefault('tourism','notour') != 'notour' ):
-            varname = apple['tourism']
+            gpx_wps.name = apple['tourism']
         elif ( apple.setdefault('amenity','noamen') != 'noamen' ):
-            varname = apple['amenity']
-        else:
-            varname = 'noname'
-        if ( varname != 'noname'):
-            gpx_wps.name = varname
-        gpx_wps.latitude = lat
-        gpx_wps.longitude = lon
+            gpx_wps.name = apple['amenity']
+        
+        gpx_wps.latitude = mean(bucket1)
+        gpx_wps.longitude = mean(bucket2)
         
         gpx.waypoints.append(gpx_wps)
             
