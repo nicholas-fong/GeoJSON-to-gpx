@@ -1,8 +1,8 @@
 # https://overpass-turbo.eu/ exports query result to GeoJSON format.
 # Note: JOSM can read GeoJSON format.
-# convert GeoJSON Points to gpx waypoints, add elevation if exists
+# convert GeoJSON Points to gpx waypoints, add elevation if exists.
 # convert GeoJSON LineStrings to a gpx track, add elevation if exists.
-# convert GeoJSON Polygons to a gpx waypoint based on centroid of the polygon vertices, no elevtation.
+# convert GeoJSON Polygons to waypoint (based on centroid of the polygon vertices) no elevtation.
 
 import sys
 from statistics import mean
@@ -28,8 +28,8 @@ for i in range(len(data['features'])):
             varname = 'noname'
         if ( varname != 'noname'):
             gpx_wps.name = varname
-            
-        if geom['coordinates'][2] is None:    
+
+        if  (len(geom['coordinates'])) == 2:
             gpx_wps.latitude = geom['coordinates'][1]
             gpx_wps.longitude = geom['coordinates'][0]
         else:
@@ -57,7 +57,7 @@ for i in range(len(data['features'])):
         node = data['features'][i]['geometry']['coordinates']
         gpx_point=gpxpy.gpx.GPXTrackPoint()
         for j in range(len(node)):
-            if geom['coordinates'][2] is None:
+            if (len(node[j])) == 2:
                 gpx_segment.points.append(gpxpy.gpx.GPXTrackPoint(node[j][1], node[j][0] ))
             else:
                 gpx_segment.points.append(gpxpy.gpx.GPXTrackPoint(node[j][1], node[j][0], node[j][2] ))
