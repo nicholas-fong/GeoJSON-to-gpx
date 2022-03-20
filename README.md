@@ -38,3 +38,9 @@ First, install gdal-bin
 ```
 org2org -f 'KML' -a_srs EPSG:4326 fountains.kml fountains.geojson
 ```
+## GPX to KML conversion
+First, install gdal-bin
+```
+org2org -f 'KML' -a_srs EPSG:4326 -mapFieldType DateTime=String fountains.kml fountains.gpx
+```
+This way of creating KML will add placemarks (pins) on the track.
