@@ -42,15 +42,12 @@ for i in range(len(data['features'])):
     if ( data['features'][i]['geometry']['type'] == 'LineString' ):
         apple = data['features'][i]['properties']
         if ( apple.setdefault('name','noname') != 'noname' ): 
-            varname = apple['name']
+            gpx_track = gpxpy.gpx.GPXTrack(apple['name'])
         elif ( apple.setdefault('tourism','notour') != 'notour' ):
-            varname = apple['tourism']
+            gpx_track = gpxpy.gpx.GPXTrack(apple['tourism'])
         else:
-            varname = 'noname'
-        if ( varname == 'noname' ):
             gpx_track = gpxpy.gpx.GPXTrack()
-        else:    
-            gpx_track = gpxpy.gpx.GPXTrack(varname)
+
         gpx.tracks.append(gpx_track)
         gpx_segment = gpxpy.gpx.GPXTrackSegment()
         gpx_track.segments.append(gpx_segment)
