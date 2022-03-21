@@ -1,8 +1,8 @@
 # https://overpass-turbo.eu/ exports query result to GeoJSON format.
-# Note: JOSM can read GeoJSON format.
+# JOSM can export to GeoJSON format.
 # convert GeoJSON Points to gpx waypoints, add elevation if exists.
 # convert GeoJSON LineStrings to a gpx track, add elevation if exists.
-# convert GeoJSON Polygons to waypoint (based on centroid of the polygon vertices) no elevtation.
+# convert GeoJSON Polygons to waypoint (based on centroid of the polygon vertices) no elevation.
 
 import sys
 from statistics import mean
@@ -11,73 +11,74 @@ import gpxpy
 import gpxpy.gpx
 
 data = geojson.load(open( sys.argv[1] + '.geojson'))
-gpx = gpxpy.gpx.GPX()   #create a gpx object
+new = gpxpy.gpx.GPX()   #create a gpx object
 
 for i in range(len(data['features'])):
     geom = data['features'][i]['geometry']
+    node = geom['coordinates']
+    
     if ( geom['type'] == 'Point' ):
-        gpx_wps = gpxpy.gpx.GPXWaypoint()
+        new_wpt = gpxpy.gpx.GPXWaypoint()
         apple = data['features'][i]['properties']
         if ( apple.setdefault('name','AAA') != 'AAA' ): 
-            gpx_wps.name = apple['name']
+            new_wpt.name = apple['name']
         elif ( apple.setdefault('tourism','BBB') != 'BBB' ):
-            gpx_wps.name = apple['tourism']
+            new_wpt.name = apple['tourism']
         elif ( apple.setdefault('amenity','CCC') != 'CCC' ):
-            gpx_wps.name = apple['amenity']
+            new_wpt.name = apple['amenity']
         else:   
-            gpx_wps.name = 'noname'
+            new_wpt.name = 'noname'
 
-        if  (len(geom['coordinates'])) == 2:
-            gpx_wps.latitude = geom['coordinates'][1]
-            gpx_wps.longitude = geom['coordinates'][0]
+        if  (len(node)) == 2:
+            new_wpt.latitude = node[1]
+            new_wpt.longitude = node[0]
         else:
-            gpx_wps.latitude = geom['coordinates'][1]
-            gpx_wps.longitude = geom['coordinates'][0]
-            gpx_wps.elevation = geom['coordinates'][2]
+            new_wpt.latitude = node[1]
+            new_wpt.longitude = node[0]
+            new_wpt.elevation = node[2]
             
-        gpx.waypoints.append(gpx_wps)
+        new.waypoints.append(new_wpt)
 
-    if ( data['features'][i]['geometry']['type'] == 'LineString' ):
+    if ( geom['type'] == 'LineString' ):
         apple = data['features'][i]['properties']
-        if ( apple.setdefault('name','BBB') != 'BBB' ): 
-            gpx_track = gpxpy.gpx.GPXTrack(apple['name'])
-        elif ( apple.setdefault('tourism','CCC') != 'CCC' ):
-            gpx_track = gpxpy.gpx.GPXTrack(apple['tourism'])
+        if ( apple.setdefault('name','AAA') != 'AAA' ): 
+            new_track = gpxpy.gpx.GPXTrack(apple['name'])   # if properties has name
         else:
-            gpx_track = gpxpy.gpx.GPXTrack('noname')
+            new_track = gpxpy.gpx.GPXTrack()
 
-        gpx.tracks.append(gpx_track)
-        gpx_segment = gpxpy.gpx.GPXTrackSegment()
-        gpx_track.segments.append(gpx_segment)
-        node = data['features'][i]['geometry']['coordinates']
-        gpx_point=gpxpy.gpx.GPXTrackPoint()
+        new.tracks.append(new_track)
+        new_segment = gpxpy.gpx.GPXTrackSegment()   #create a new track segment
+        new_track.segments.append(new_segment)      #append the new segment
+        
         for j in range(len(node)):
             if (len(node[j])) == 2:
-                gpx_segment.points.append(gpxpy.gpx.GPXTrackPoint(node[j][1], node[j][0] ))
+                new_segment.points.append(gpxpy.gpx.GPXTrackPoint(node[j][1], node[j][0] ))
             else:
-                gpx_segment.points.append(gpxpy.gpx.GPXTrackPoint(node[j][1], node[j][0], node[j][2] ))
+                new_segment.points.append(gpxpy.gpx.GPXTrackPoint(node[j][1], node[j][0], node[j][2] ))
                 
     if ( geom['type'] == 'Polygon' ):
-        gpx_wps = gpxpy.gpx.GPXWaypoint()
-        node = data['features'][i]['geometry']['coordinates'][0]
+        new_wpt = gpxpy.gpx.GPXWaypoint()
+        pnode = data['features'][i]['geometry']['coordinates'][0]
         bucket1=[]  # use to calculate centroid
         bucket2=[]
-        for j in range(len(node)):
-            bucket1.append( node[j][1] )
-            bucket2.append( node[j][0] )
+        for j in range(len(pnode)):
+            if j > 0:           # skip first set of coordinates, it is duplicated in the last set
+                bucket1.append( pnode[j][1] )
+                bucket2.append( pnode[j][0] )
+        
         apple = data['features'][i]['properties']
         if ( apple.setdefault('name','AAA') != 'AAA' ): 
-            gpx_wps.name = apple['name']
+            new_wpt.name = apple['name']
         elif ( apple.setdefault('tourism','BBB') != 'BBB' ):
-            gpx_wps.name = apple['tourism']
+            new_wpt.name = apple['tourism']
         elif ( apple.setdefault('amenity','CCC') != 'CCC' ):
-            gpx_wps.name = apple['amenity']
+            new_wpt.name = apple['amenity']
         else:     
-            gpx_wps.name = 'noname'
+            new_wpt.name = 'noname'
             
-        gpx_wps.latitude = mean(bucket1)
-        gpx_wps.longitude = mean(bucket2)
+        new_wpt.latitude = mean(bucket1)
+        new_wpt.longitude = mean(bucket2)
         
-        gpx.waypoints.append(gpx_wps)
+        new.waypoints.append(new_wpt)
             
-print( gpx.to_xml() )
+print( new.to_xml() )
