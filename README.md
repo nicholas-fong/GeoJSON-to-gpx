@@ -18,6 +18,7 @@ The output of these converters is directed to stdout to allow felxibility of usi
 $python geo2gpx.py myhouse   (myhouse is a GeoJSON file with file extension .geojson)
 $python geo2gpx.py myhouse > myhouse.gpx (save to a gpx file: Point, Polygon centroid -> gpx waypoint; LineString -> gpx track)
 $python geo2trk.py mytrail   (only extract LineString elements in GeoJSON and map them to a gpx track)
+$python geo2rte.py mytrail   (only extract LineString elements in GeoJSON and map them to a gpx route)
 $python geo2wpt.py mytrail   (only extract Point and Polygon elements and map them to gpx waypoint; Polygon's centroid is used as waypoint)
 $python gpx2geo.py mygpx     (waypoint is mapped to Point; route and track are mapped to LineString)
 ```
@@ -26,7 +27,7 @@ $python gpx2geo.py mygpx     (waypoint is mapped to Point; route and track are m
 - There is no strictly defined placeholder for elevation in RFC 7946: it says "Altitude or elevation MAY be included as an optional third
    element". Design decision: elevation, if exists, is added as ['geometry']['coordinates'][2] 
 - Note that gdal-ogr2ogr adds elevation to ['properties']['ele']. 
-- To add elevation to gpx, use code from [gpx-add-SRTM-elevation](https://github.com/nicholas-fong/gpx-add-SRTM-elevation)
+- To add elevation to gpx, use codes from [gpx-add-SRTM-elevation](https://github.com/nicholas-fong/gpx-add-SRTM-elevation)
 
 ### A simple use case
 Download a city's Open Data database of drinking fountains (e.g. fountains.geojson)
