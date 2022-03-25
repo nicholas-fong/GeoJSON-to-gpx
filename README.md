@@ -44,4 +44,4 @@ First, install gdal-bin
 ```
 org2org -f 'KML' -a_srs EPSG:4326 -mapFieldType DateTime=String fountains.kml fountains.gpx
 ```
-This way of creating KML will add placemarks (pins) on the track.
+This way of creating KML (from GPX) will add placemarks (pins) on the track.
