@@ -25,8 +25,7 @@ $python gpx2geo.py mygpx     (waypoint is transformed to Point; route and track 
 #### Notes
 - Transforming GeoJSON Polygon to a single gpx waypoint is not an ideal strategy, but is good enough for casual hobby use.
 - There is no strictly defined placeholder for elevation in RFC 7946: it says "Altitude or elevation MAY be included as an optional third
-   element". Design decision: elevation, if exists, is added as ['geometry']['coordinates'][2] 
-- Note that gdal-ogr2ogr adds elevation to ['properties']['ele']. 
+   element". Many packages seem to use the optional third element  ['geometry']['coordinates'][2] 
 - To add elevation to gpx, use codes from [gpx-add-SRTM-elevation](https://github.com/nicholas-fong/gpx-add-SRTM-elevation)
 
 ### A simple use case
@@ -38,10 +37,15 @@ $python geo2gpx.py fountains > fountains.gpx
 First, install gdal-bin
 ```
 ogr2ogr -f 'KML' -a_srs EPSG:4326 fountains.kml fountains.geojson
+or
+ogr2ogr -f 'LIBKML' foundtains.kml fountains.geojson
+or
+ogr2ogr fountains.kml fountains.geojson
 ```
 ## GPX to KML conversion
 First, install gdal-bin
 ```
-ogr2ogr -f 'KML' -a_srs EPSG:4326 -mapFieldType DateTime=String fountains.kml fountains.gpx
+ogr2ogr -f 'LIBKML' -mapFieldType DateTime=String fountains.kml fountains.gpx
+(not very satisfactory result, elevations in kml are lost)
 ```
-This way of creating KML (from GPX) will add placemarks (pins) on the track.
+
