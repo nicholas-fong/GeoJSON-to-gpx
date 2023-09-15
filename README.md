@@ -1,4 +1,4 @@
-## geoJSON-gpx-convert
+## GeoJSON-to-gpx
 A collection of geoJSON to gpx converters (bidirectional).
 
 - `Overpass-turbo` [queries](https://overpass-turbo.eu/)
@@ -25,27 +25,13 @@ $python gpx2geo.py mygpx     (waypoint is transformed to Point; route and track 
 #### Notes
 - Transforming GeoJSON Polygon to a single gpx waypoint is not an ideal strategy, but is good enough for casual hobby use.
 - There is no strictly defined placeholder for elevation in RFC 7946: it says "Altitude or elevation MAY be included as an optional third
-   element". Many packages seem to use the optional third element  ['geometry']['coordinates'][2] 
-- To add elevation to gpx, use codes from [gpx-add-SRTM-elevation](https://github.com/nicholas-fong/gpx-add-SRTM-elevation)
+   element". This xyz approach has been widely adopted ['geometry']['coordinates'][2] 
+- To add elevation to gpx or GeoJSON, use codes from [SRTM-GeoTIFF](https://github.com/nicholas-fong/SRTM-GeoTIFF)
 
 ### A simple use case
 Download a city's Open Data database of drinking fountains (e.g. fountains.geojson)
 ```
 $python geo2gpx.py fountains > fountains.gpx
 ```
-## GeoJSON to KML conversion
-First, install gdal-bin
-```
-ogr2ogr -f 'KML' -a_srs EPSG:4326 fountains.kml fountains.geojson
-or
-ogr2ogr -f 'LIBKML' foundtains.kml fountains.geojson
-or
-ogr2ogr fountains.kml fountains.geojson
-```
-## GPX to KML conversion
-First, install gdal-bin
-```
-ogr2ogr -f 'LIBKML' -mapFieldType DateTime=String fountains.kml fountains.gpx
-(not very satisfactory result, elevations in kml are lost)
-```
+
 
