@@ -1,15 +1,15 @@
 import sys
 import geojson
-import json
-from geojson import FeatureCollection, Feature, Point, LineString, Polygon
+from geojson import FeatureCollection, Feature
 
 if len(sys.argv) < 2:
     print("enter a geojson file to convert to geojson file ")
     sys.exit(1)
 
 basket = []       
-
-data = geojson.load(open( sys.argv[1] + '.geojson'))
+in_file = open( sys.argv[1] + '.geojson')
+data = geojson.load(in_file)
+in_file.close()
 
 for i in range(len(data['features'])):
     my_type = data['features'][i]['geometry']['type']
@@ -32,9 +32,8 @@ for i in range(len(data['features'])):
         my_feature = Feature(geometry=my_geometry, properties=my_properties)
         basket.append(my_feature)          
 
-features_collected = str(FeatureCollection(basket))
-#print ( features_collected )
+out_str = str(FeatureCollection(basket)).replace("Name","name").replace("NAME","name")
 
 with open( sys.argv[1]+'.geojson', 'w') as outfile:
-    outfile.write( features_collected )
+    outfile.write( out_str )
 

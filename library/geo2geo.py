@@ -8,8 +8,9 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 basket = []       
-
-data = geojson.load(open( sys.argv[1] + '.geojson'))
+in_file = open( sys.argv[1] + '.geojson')
+data = geojson.load(in_file)
+in_file.close()
 
 for i in range(len(data['features'])):
     my_type = data['features'][i]['geometry']['type']
@@ -33,9 +34,7 @@ for i in range(len(data['features'])):
         basket.append(my_feature)   
 
 geojson_string = json.dumps(FeatureCollection(basket), indent=2, ensure_ascii=False)
-
-clean_str = geojson_string.replace("Name","name").replace("NAME","name")
-#print(clean_str)
+cleaner_str = geojson_string.replace("Name","name").replace("NAME","name")
 
 with open( sys.argv[1]+'.geojson', 'w') as outfile:
-    outfile.write( clean_str )
+    outfile.write( cleaner_str )
