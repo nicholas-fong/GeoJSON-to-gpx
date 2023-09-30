@@ -1,13 +1,15 @@
 # GeoJSON
 # convert LineStrings to routes
-# Polygons and points are discarded
+# Polygons and Points are discarded
 
 import sys
 import geojson
 import gpxpy
 import gpxpy.gpx
 
-data = geojson.load(open( sys.argv[1] + '.geojson'))
+with open( sys.argv[1]+'.geojson', 'r') as infile:
+   data = geojson.load ( infile )
+
 new = gpxpy.gpx.GPX()   #create a new gpx object
 
 for i in range(len(data['features'])):
@@ -15,12 +17,14 @@ for i in range(len(data['features'])):
     node = geom['coordinates']
     
     if ( geom['type'] == 'LineString' ):
-        apple = data['features'][i]['properties']
-        if ( apple.setdefault('name','AAA') != 'AAA' ): 
-            new_route = gpxpy.gpx.GPXRoute(apple['name'])
-        else:
-            new_route = gpxpy.gpx.GPXRoute()
-        
+        try:
+            myname = data['features'][i]['properties']['name']
+        except:
+            try:
+                myname = data['features'][i]['properties']['Name']
+            except:
+                myname = 'noname'
+        new_route =  gpxpy.gpx.GPXRoute( myname )       
         new.routes.append(new_route)
 
         for j in range(len(node)):
@@ -30,5 +34,8 @@ for i in range(len(data['features'])):
                 new_route.points.append(gpxpy.gpx.GPXRoutePoint(node[j][1],node[j][0],node[j][2]))   
 
 print( new.to_xml() )
+
+with open(sys.argv[1]+'.gpx', 'w') as file:
+    file.write( new.to_xml() )
 
 

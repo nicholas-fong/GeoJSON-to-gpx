@@ -4,13 +4,21 @@
 # convert GeoJSON LineStrings to a gpx track, add elevation if exists.
 # convert GeoJSON Polygons to waypoint (based on centroid of the polygon vertices) no elevation.
 
+# code reviewed September 2023
+
 import sys
 from statistics import mean
 import geojson
 import gpxpy
 import gpxpy.gpx
 
-data = geojson.load(open( sys.argv[1] + '.geojson'))
+if len(sys.argv) < 2:
+    print("Please enter a geojson filename. Points, LineStrings and Polygon (centroid) are converted ") 
+    sys.exit(1)
+
+with open( sys.argv[1]+'.geojson', 'r') as infile:
+   data = geojson.load ( infile )
+
 new = gpxpy.gpx.GPX()   #create a gpx object
 
 for i in range(len(data['features'])):
@@ -61,10 +69,9 @@ for i in range(len(data['features'])):
         pnode = data['features'][i]['geometry']['coordinates'][0]
         bucket1=[]  # use to calculate centroid
         bucket2=[]
-        for j in range(len(pnode)):
-            if j > 0:           # skip first set of coordinates, it is duplicated in the last set
-                bucket1.append( pnode[j][1] )
-                bucket2.append( pnode[j][0] )
+        for j in range(len(pnode)-1):  #skip the last node, which is a duplicate of the first node
+            bucket1.append( pnode[j][1] )
+            bucket2.append( pnode[j][0] )
         
         apple = data['features'][i]['properties']
         if ( apple.setdefault('name','AAA') != 'AAA' ): 
@@ -82,3 +89,6 @@ for i in range(len(data['features'])):
         new.waypoints.append(new_wpt)
             
 print( new.to_xml() )
+
+with open(sys.argv[1]+'.gpx', 'w') as file:
+    file.write( new.to_xml() )

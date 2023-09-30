@@ -1,13 +1,17 @@
 # GeoJSON
 # convert LineStrings to tracks
-# Polygons and points are discarded
+# Points and Polygons are discarded
+
+# code reviewed September 2023
 
 import sys
 import geojson
 import gpxpy
 import gpxpy.gpx
 
-data = geojson.load(open( sys.argv[1] + '.geojson'))
+with open( sys.argv[1]+'.geojson', 'r') as infile:
+   data = geojson.load ( infile )
+
 new = gpxpy.gpx.GPX()    #create a new gpx object
 
 for i in range(len(data['features'])):
@@ -15,12 +19,14 @@ for i in range(len(data['features'])):
     node = geom['coordinates']   
     
     if ( geom['type'] == 'LineString' ):
-        banana = data['features'][i]['properties']
-        if ( banana.setdefault('name','AAA') != 'AAA' ):    # if properties has name
-            new_track = gpxpy.gpx.GPXTrack(banana['name'])  #create a new track object with name
-        else:
-            new_track = gpxpy.gpx.GPXTrack()  #create a new track object without name
-        
+        try:
+            myname = data['features'][i]['properties']['name']
+        except:
+            try:
+                myname = data['features'][i]['properties']['Name']
+            except:
+                myname = 'noname'
+        new_track = gpxpy.gpx.GPXTrack(myname)  #create a new track object
         new.tracks.append(new_track)
         new_segment = gpxpy.gpx.GPXTrackSegment()   #create a new track segment
         new_track.segments.append(new_segment)      #append the new segment
@@ -33,3 +39,6 @@ for i in range(len(data['features'])):
             
 print( new.to_xml() )
 
+with open(sys.argv[1]+'.gpx', 'w') as file:
+    file.write( new.to_xml() )
+    

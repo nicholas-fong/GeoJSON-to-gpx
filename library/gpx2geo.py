@@ -1,13 +1,15 @@
 # gpx waypoint is mapped to geoJSON Point
-# gpx routes and tracks are mapped to geojson LineString
+# gpx routes and gpx tracks are mapped to geojson LineString
 # gpx elevation if exists is added as the third parameter in geometry
 
 import sys
 import gpxpy
 import gpxpy.gpx
 from geojson import FeatureCollection, Feature, Point, LineString
+import json
 
 filename = (sys.argv[1]+'.gpx')
+
 with open( filename ) as infile:
     gpx = gpxpy.parse(infile)
     
@@ -50,5 +52,8 @@ for route in gpx.routes:
     my_feature = Feature(geometry=my_line, properties={"name":varname})
     basket.append(my_feature)   
 
-print ( FeatureCollection(basket) )
+geojson_string = json.dumps(FeatureCollection(basket), indent=2, ensure_ascii=False)
+print(geojson_string)
 
+#with open(sys.argv[1]+'.geojson', 'w') as outfile:
+#    outfile.write( geojson_string )
