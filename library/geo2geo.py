@@ -8,9 +8,8 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 basket = []       
-in_file = open( sys.argv[1] + '.geojson')
-data = geojson.load(in_file)
-in_file.close()
+with open( sys.argv[1]+'.geojson', 'r') as infile:
+   data = geojson.load ( infile )
 
 for i in range(len(data['features'])):
     my_type = data['features'][i]['geometry']['type']
