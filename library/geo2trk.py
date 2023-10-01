@@ -25,7 +25,11 @@ for i in range(len(data['features'])):
             try:
                 myname = data['features'][i]['properties']['Name']
             except:
-                myname = 'noname'
+                try:
+                    myname = data['features'][i]['properties']['NAME']
+                except:    
+                    myname = 'noname'
+
         new_track = gpxpy.gpx.GPXTrack(myname)  #create a new track object
         new.tracks.append(new_track)
         new_segment = gpxpy.gpx.GPXTrackSegment()   #create a new track segment
