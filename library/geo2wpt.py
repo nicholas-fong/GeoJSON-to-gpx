@@ -41,10 +41,9 @@ for i in range(len(data['features'])):
         pnode = data['features'][i]['geometry']['coordinates'][0]
         bucket1=[]
         bucket2=[]
-        for j in range(len(pnode)):
-            if j > 0:           # skip first set of coordinates, it is duplicated in the last set
-                bucket1.append( pnode[j][1] )
-                bucket2.append( pnode[j][0] )
+        for j in range(len(pnode)-1):
+            bucket1.append( pnode[j][1] )
+            bucket2.append( pnode[j][0] )
         try:
             myname = data['features'][i]['properties']['name']
         except:
