@@ -1,12 +1,15 @@
+# compact GeoJSON file into one line. Machine readable, more compact, but less human readable
+
 import sys
 import geojson
 from geojson import FeatureCollection, Feature
 
 if len(sys.argv) < 2:
-    print("enter a geojson file to convert to geojson file ")
+    print("enter a geojson file to compact ")
     sys.exit(1)
 
-basket = []       
+basket = []
+      
 with open( sys.argv[1]+'.geojson', 'r') as infile:
    data = geojson.load ( infile )
 
