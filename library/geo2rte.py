@@ -23,7 +23,11 @@ for i in range(len(data['features'])):
             try:
                 myname = data['features'][i]['properties']['Name']
             except:
-                myname = 'noname'
+                try:
+                    myname = data['features'][i]['properties']['NAME']
+                except:    
+                    myname = 'noname'
+
         new_route =  gpxpy.gpx.GPXRoute( myname )       
         new.routes.append(new_route)
 
