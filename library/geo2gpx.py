@@ -26,68 +26,62 @@ for i in range(len(data['features'])):
     node = geom['coordinates']
     
     if ( geom['type'] == 'Point' ):
-        new_wpt = gpxpy.gpx.GPXWaypoint()
-        apple = data['features'][i]['properties']
-        if ( apple.setdefault('name','AAA') != 'AAA' ): 
-            new_wpt.name = apple['name']
-        elif ( apple.setdefault('tourism','BBB') != 'BBB' ):
-            new_wpt.name = apple['tourism']
-        elif ( apple.setdefault('amenity','CCC') != 'CCC' ):
-            new_wpt.name = apple['amenity']
-        else:   
-            new_wpt.name = 'noname'
-
-        if  (len(node)) == 2:
+        new_wpt = gpxpy.gpx.GPXWaypoint()    # create new point object
+        try:
+            myname = data['features'][i]['properties']['name']
+        except:
+            try:
+                myname = data['features'][i]['properties']['Name']
+            except:
+                myname = 'noname'
+        new_wpt.name = myname
+        if (len(node)) == 2:
             new_wpt.latitude = node[1]
             new_wpt.longitude = node[0]
-        else:
+        else:    
             new_wpt.latitude = node[1]
             new_wpt.longitude = node[0]
-            new_wpt.elevation = node[2]
-            
+            new_wpt.elevation = node[2]    
         new.waypoints.append(new_wpt)
 
     if ( geom['type'] == 'LineString' ):
-        apple = data['features'][i]['properties']
-        if ( apple.setdefault('name','AAA') != 'AAA' ): 
-            new_track = gpxpy.gpx.GPXTrack(apple['name'])   # if properties has name
-        else:
-            new_track = gpxpy.gpx.GPXTrack()
+        try:
+            myname = data['features'][i]['properties']['name']
+        except:
+            try:
+                myname = data['features'][i]['properties']['Name']
+            except:
+                myname = 'noname'
+        new_route =  gpxpy.gpx.GPXRoute( myname )       
+        new.routes.append(new_route)
 
-        new.tracks.append(new_track)
-        new_segment = gpxpy.gpx.GPXTrackSegment()   #create a new track segment
-        new_track.segments.append(new_segment)      #append the new segment
-        
         for j in range(len(node)):
             if (len(node[j])) == 2:
-                new_segment.points.append(gpxpy.gpx.GPXTrackPoint(node[j][1], node[j][0] ))
+                new_route.points.append(gpxpy.gpx.GPXRoutePoint(node[j][1],node[j][0]))
             else:
-                new_segment.points.append(gpxpy.gpx.GPXTrackPoint(node[j][1], node[j][0], node[j][2] ))
+                new_route.points.append(gpxpy.gpx.GPXRoutePoint(node[j][1],node[j][0],node[j][2]))   
+
                 
-    if ( geom['type'] == 'Polygon' ):
+    if ( geom['type'] == 'Polygon' ):     # if Polygon, calculate centroid and consider it as a Point
         new_wpt = gpxpy.gpx.GPXWaypoint()
         pnode = data['features'][i]['geometry']['coordinates'][0]
-        bucket1=[]  # use to calculate centroid
+        bucket1=[]
         bucket2=[]
-        for j in range(len(pnode)-1):  #skip the last node, which is a duplicate of the first node
+        for j in range(len(pnode)-1):
             bucket1.append( pnode[j][1] )
             bucket2.append( pnode[j][0] )
-        
-        apple = data['features'][i]['properties']
-        if ( apple.setdefault('name','AAA') != 'AAA' ): 
-            new_wpt.name = apple['name']
-        elif ( apple.setdefault('tourism','BBB') != 'BBB' ):
-            new_wpt.name = apple['tourism']
-        elif ( apple.setdefault('amenity','CCC') != 'CCC' ):
-            new_wpt.name = apple['amenity']
-        else:     
-            new_wpt.name = 'noname'
-            
+        try:
+            myname = data['features'][i]['properties']['name']
+        except:
+            try:
+                myname = data['features'][i]['properties']['Name']
+            except:
+                myname = 'noname'
+        new_wpt.name = myname
         new_wpt.latitude = mean(bucket1)
         new_wpt.longitude = mean(bucket2)
-        
         new.waypoints.append(new_wpt)
-            
+
 print( new.to_xml() )
 
 with open(sys.argv[1]+'.gpx', 'w') as file:
