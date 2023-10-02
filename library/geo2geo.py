@@ -7,9 +7,10 @@ if len(sys.argv) < 2:
     print("enter a geojson file to convert to geojson file ")
     sys.exit(1)
 
-basket = []       
 with open( sys.argv[1]+'.geojson', 'r') as infile:
    data = geojson.load ( infile )
+
+basket = []       
 
 for i in range(len(data['features'])):
     my_type = data['features'][i]['geometry']['type']

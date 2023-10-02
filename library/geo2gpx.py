@@ -13,7 +13,7 @@ import gpxpy
 import gpxpy.gpx
 
 if len(sys.argv) < 2:
-    print("Please enter a geojson filename. Points, LineStrings and Polygon (centroid) are converted ") 
+    print("Please enter a geojson filename. Points, LineStrings and Polygon (point centroid) are converted ") 
     sys.exit(1)
 
 with open( sys.argv[1]+'.geojson', 'r') as infile:
