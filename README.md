@@ -1,7 +1,6 @@
 ## GeoJSON-to-gpx
 A collection of GeoJSON to GPX converters (bidirectional).
-Also includes (geo2geo.py) which reformats geojson to JSON style (beautify) and make it more human readable,
-(geo2geo-lean.py) reformats GeoJSON to a compact one line.
+Also includes geo2geo.py which reformats geojson to JSON style (pretty-print or beautify) and makes it human readable. To reverse the process, geo2geo-compact.py reformats GeoJSON to a compact, machine readable one line.
 
 - `Overpass-turbo` [queries](https://overpass-turbo.eu/)
 
