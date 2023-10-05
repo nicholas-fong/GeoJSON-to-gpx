@@ -9,6 +9,7 @@ if len(sys.argv) < 2:
 
 with open( sys.argv[1]+'.geojson', 'r') as infile:
    data = geojson.load ( infile )
+infile.close()   
 
 basket = []       
 

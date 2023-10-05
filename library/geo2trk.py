@@ -11,6 +11,7 @@ import gpxpy.gpx
 
 with open( sys.argv[1]+'.geojson', 'r') as infile:
    data = geojson.load ( infile )
+infile.close()   
 
 new = gpxpy.gpx.GPX()    #create a new gpx object
 

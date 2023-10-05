@@ -12,6 +12,7 @@ basket = []
       
 with open( sys.argv[1]+'.geojson', 'r') as infile:
    data = geojson.load ( infile )
+infile.close()   
 
 for i in range(len(data['features'])):
     my_type = data['features'][i]['geometry']['type']
