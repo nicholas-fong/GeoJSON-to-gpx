@@ -1,7 +1,6 @@
 import sys
 import geojson
-import json
-from geojson import FeatureCollection, Feature, Point, LineString, Polygon
+from geojson import FeatureCollection, Feature, Point, LineString, Polygon, dumps
 
 if len(sys.argv) < 2:
     print("enter a geojson file to convert to geojson file ")
@@ -22,9 +21,17 @@ for i in range(len(data['features'])):
         my_feature = Feature(geometry=my_geometry, properties=my_properties)
         basket.append(my_feature)
 
+    elif my_type == 'MultiPoint':
+        my_feature = Feature(geometry=my_geometry, properties=my_properties)
+        basket.append(my_feature)        
+
     elif my_type == 'LineString':
         my_feature = Feature(geometry=my_geometry, properties=my_properties)
-        basket.append(my_feature)   
+        basket.append(my_feature)
+
+    elif my_type == 'MultiLineString':
+        my_feature = Feature(geometry=my_geometry, properties=my_properties)
+        basket.append(my_feature)
 
     elif my_type == 'Polygon':
         my_feature = Feature(geometry=my_geometry, properties=my_properties)
@@ -34,7 +41,7 @@ for i in range(len(data['features'])):
         my_feature = Feature(geometry=my_geometry, properties=my_properties)
         basket.append(my_feature)   
 
-geojson_string = json.dumps(FeatureCollection(basket), indent=2, ensure_ascii=False)
+geojson_string = dumps(FeatureCollection(basket), indent=2, ensure_ascii=False)
 cleaner_str = geojson_string.replace("Name","name").replace("NAME","name")
 
 with open( sys.argv[1]+'.geojson', 'w') as outfile:
