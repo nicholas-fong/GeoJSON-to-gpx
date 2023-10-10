@@ -1,48 +1,25 @@
 import sys
+import re
 import geojson
-from geojson import FeatureCollection, Feature, Point, LineString, Polygon, dumps
+from geojson import FeatureCollection, Feature, dumps
 
-if len(sys.argv) < 2:
-    print("enter a geojson file to convert to geojson file ")
-    sys.exit(1)
+# GeoJSON clean up and pretty print.
 
 with open( sys.argv[1]+'.geojson', 'r') as infile:
    data = geojson.load ( infile )
 infile.close()   
 
 basket = []       
-
 for i in range(len(data['features'])):
-    my_type = data['features'][i]['geometry']['type']
+    #type = data['features'][i]['geometry']['type']
     my_geometry = data['features'][i]['geometry']
     my_properties = data['features'][i]['properties']
-
-    if my_type == 'Point':
-        my_feature = Feature(geometry=my_geometry, properties=my_properties)
-        basket.append(my_feature)
-
-    elif my_type == 'MultiPoint':
-        my_feature = Feature(geometry=my_geometry, properties=my_properties)
-        basket.append(my_feature)        
-
-    elif my_type == 'LineString':
-        my_feature = Feature(geometry=my_geometry, properties=my_properties)
-        basket.append(my_feature)
-
-    elif my_type == 'MultiLineString':
-        my_feature = Feature(geometry=my_geometry, properties=my_properties)
-        basket.append(my_feature)
-
-    elif my_type == 'Polygon':
-        my_feature = Feature(geometry=my_geometry, properties=my_properties)
-        basket.append(my_feature)   
-
-    elif my_type == 'MultiPolygon':
-        my_feature = Feature(geometry=my_geometry, properties=my_properties)
-        basket.append(my_feature)   
+    basket.append(Feature(geometry=my_geometry, properties=my_properties))
 
 geojson_string = dumps(FeatureCollection(basket), indent=2, ensure_ascii=False)
-cleaner_str = geojson_string.replace("Name","name").replace("NAME","name")
+# clean up some programs that use different spellings for name
+output_string = re.sub(r'name', 'name', geojson_string, flags=re.IGNORECASE)
 
+#print(output_string)
 with open( sys.argv[1]+'.geojson', 'w') as outfile:
-    outfile.write( cleaner_str )
+    outfile.write( output_string )
