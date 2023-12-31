@@ -7,7 +7,8 @@
 import sys
 import gpxpy
 import gpxpy.gpx
-from geojson import FeatureCollection, Feature, Point, LineString, dumps
+from geojson import FeatureCollection, Feature, Point, LineString
+import json
 
 with open( sys.argv[1]+'.gpx' ) as infile:
     gpx = gpxpy.parse(infile)
@@ -47,7 +48,7 @@ for track in gpx.tracks:
         feature = Feature(geometry=LineString(track_list), properties={"name":track.name})
         features.append(feature)   
 
-geojson_string = dumps(FeatureCollection(features), indent=2, ensure_ascii=False)
+geojson_string = json.dumps(FeatureCollection(features), indent=2, ensure_ascii=False)
 print(geojson_string)
 
 with open(sys.argv[1]+'.geojson', 'w') as outfile:
