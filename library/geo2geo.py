@@ -1,23 +1,22 @@
 import sys
 import re
-import geojson
-from geojson import FeatureCollection, Feature, dumps
+import json
+from geojson import FeatureCollection, Feature
 
 # GeoJSON clean up and pretty print.
 
 with open( sys.argv[1]+'.geojson', 'r') as infile:
-   data = geojson.load ( infile )
-infile.close()   
+   data = json.load ( infile )
+infile.close()     # explicit close because I will use this file again.
 
-basket = []       
+features = []       
 for feature in data['features']:
-    basket.append(Feature(geometry=feature['geometry'], properties=feature['properties']))
+    features.append(Feature(geometry=feature['geometry'], properties=feature['properties']))
 
-geojson_string = dumps(FeatureCollection(basket), indent=2, ensure_ascii=False)
-# clean up some programs that use different spellings for name
-output_string = re.sub(r'name', 'name', geojson_string, flags=re.IGNORECASE)
+geojson_string = json.dumps(FeatureCollection(features), indent=2, ensure_ascii=False)
+# clean up some programs that use different spellings for name, make all of them lowercase name
+clean_string = re.sub(r'name', 'name', geojson_string, flags=re.IGNORECASE)
 
-print(output_string)
+print(clean_string)
 with open( sys.argv[1]+'.geojson', 'w') as outfile:
-    outfile.write( output_string )
-    
+    outfile.write( clean_string )
