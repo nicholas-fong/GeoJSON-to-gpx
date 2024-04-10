@@ -19,7 +19,8 @@ for waypoint in gpx.waypoints:
         my_point = Point((waypoint.longitude, waypoint.latitude, int(waypoint.elevation)))
     else:
         my_point = Point((waypoint.longitude, waypoint.latitude))
-    feature = Feature(geometry=my_point, properties={"name":waypoint.name})
+
+    feature = Feature(geometry=my_point, properties={"name":waypoint.name, "sym":waypoint.symbol})
     features.append(feature)    
 
 for route in gpx.routes: 
