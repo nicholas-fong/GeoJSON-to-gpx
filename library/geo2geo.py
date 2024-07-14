@@ -1,22 +1,30 @@
 import sys
-import re
 import json
+import re
 from geojson import FeatureCollection, Feature
 
-# GeoJSON clean up and pretty print.
+# remove newlines and blanks in the coordinates array, for better readibility of the GeoJSON pretty print
 
-with open( sys.argv[1]+'.geojson', 'r') as infile:
-   data = json.load ( infile )
-infile.close()     # explicit close because I will use this file again.
+def custom_dumps(obj, **kwargs):
+    def compact_coordinates(match):
+        # Remove newlines and extra spaces within the coordinates array
+        return match.group(0).replace('\n', '').replace(' ', '')
 
-features = []       
+    json_str = json.dumps(obj, **kwargs)
+    # Use a more robust regex to match coordinate arrays
+    json_str = re.sub(r'\[\s*([^\[\]]+?)\s*\]', compact_coordinates, json_str)
+    return json_str
+
+with open(sys.argv[1] + '.geojson', 'r', encoding='utf-8') as infile:
+    data = json.load(infile)
+
+bucket = []
 for feature in data['features']:
-    features.append(Feature(geometry=feature['geometry'], properties=feature['properties']))
+    bucket.append(Feature(geometry=feature['geometry'], properties=feature['properties']))
 
-geojson_string = json.dumps(FeatureCollection(features), indent=2, ensure_ascii=False)
-# clean up some programs that use different spellings for name, make all of them lowercase name
-clean_string = re.sub(r'name', 'name', geojson_string, flags=re.IGNORECASE)
+output_string = custom_dumps(FeatureCollection(bucket), indent=2, ensure_ascii=False)
+#print(output_string)
 
-print(clean_string)
-with open( sys.argv[1]+'.geojson', 'w') as outfile:
-    outfile.write( clean_string )
+with open(sys.argv[1] + '.geojson', 'w', encoding='utf-8') as outfile:
+    outfile.write(output_string)
+
