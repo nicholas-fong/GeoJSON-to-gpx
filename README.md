@@ -23,10 +23,10 @@ $python3 geo2geo-compact.py myhouse (compact GeoJSON to one line)
 ```
 #### Notes
 
-- To add elevation to gpx or GeoJSON or KML, use codes from [SRTM-GeoTIFF](https://github.com/nicholas-fong/SRTM-GeoTIFF)
+- To add elevation to GPX or GeoJSON or KML, use codes from [SRTM-GeoTIFF](https://github.com/nicholas-fong/SRTM-GeoTIFF)
 
 ### Usage
 Download a city's Open Data database of drinking fountains (e.g. fountains.geojson in library)
 ```
-$python3 geo2gpx.py fountains > fountains.gpx
+$python3 geo2gpx.py fountains
 ```
