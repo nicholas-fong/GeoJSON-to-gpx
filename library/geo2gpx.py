@@ -2,12 +2,11 @@
 # JOSM can export to GeoJSON format.
 # convert GeoJSON Points to gpx waypoints, add elevation if exists.
 # convert GeoJSON LineStrings to a gpx track, add elevation if exists.
-# convert GeoJSON Polygons to waypoint (based on centroid of the polygon vertices) no elevation.
+# convert GeoJSON Polygons to a waypoint (based on centroid of the polygon vertices), no elevation.
 
 import sys
 from statistics import mean
 import geojson
-import gpxpy
 import gpxpy.gpx
 
 if len(sys.argv) < 2:
@@ -18,7 +17,6 @@ custom_symbol = input( "GeoJSON to GPX, if symbol is missing, enter a custom sym
 
 with open( sys.argv[1]+'.geojson', 'r') as infile:
    data = geojson.load ( infile )
-infile.close()   
 
 new = gpxpy.gpx.GPX()   #create a gpx object
 
@@ -28,7 +26,7 @@ for i in range(len(data['features'])):
     
     if ( geom['type'] == 'Point' ):
         new_wpt = gpxpy.gpx.GPXWaypoint()    # create new point object
-        try:
+        try:                      # can also use properties.get()  cleaner code
             myname = data['features'][i]['properties']['name']
         except:
             try:
@@ -96,6 +94,6 @@ for i in range(len(data['features'])):
         new.waypoints.append(new_wpt)
 
 #print( new.to_xml() )
-print ( "File saved as a gpx file")
 with open(sys.argv[1]+'.gpx', 'w') as file:
     file.write( new.to_xml() )
+print ( f"File saved as {sys.argv[1]+'.gpx'}")
