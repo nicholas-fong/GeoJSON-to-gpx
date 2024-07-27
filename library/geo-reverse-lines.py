@@ -35,12 +35,12 @@ for feature in data['features']:
         basket.append(Feature(geometry=MultiLineString(multiline_bucket), properties=feature['properties']))
 
     if feature['geometry'].get('type') == 'GeometryCollection':
-        new_collection = []
+        line_collection = []
         for geometry in feature["geometry"]["geometries"]:
             if geometry["type"] == "LineString":
                 coordinates = geometry["coordinates"]
-                new_collection.append(LineString(reverse(coordinates)))
-        basket.append(Feature(geometry=GeometryCollection(new_collection), properties=feature['properties']))  
+                line_collection.append(LineString(reverse(coordinates)))
+        basket.append(Feature(geometry=GeometryCollection(line_collection), properties=feature['properties']))  
 
 geojson_string = pretty_dumps(FeatureCollection(basket), indent=2, ensure_ascii=False)
 improved_geojson_string = re.sub(r'name', 'name', geojson_string, flags=re.IGNORECASE)
