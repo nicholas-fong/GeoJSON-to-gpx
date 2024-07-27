@@ -28,7 +28,6 @@ for feature in data['features']:
     bucket.append(Feature(geometry=feature['geometry'], properties=feature['properties']))
 
 output_string = pretty_dumps(FeatureCollection(bucket), indent=2, ensure_ascii=False)
-#print(output_string)
 
 with open(sys.argv[1] + '.geojson', 'w', encoding='utf-8') as outfile:
     outfile.write(output_string)
