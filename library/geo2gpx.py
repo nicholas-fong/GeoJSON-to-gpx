@@ -10,15 +10,13 @@ import geojson
 import gpxpy.gpx
 
 if len(sys.argv) < 2:
-    print("Please enter a geojson filename. Points, LineStrings and Polygon (point centroid) are converted ") 
+    print("Enter a GeoJSON file. Convert Points, LineStrings and Polygon (centroid) to GPX ") 
     sys.exit(1)
 
-custom_symbol = input( "GeoJSON to GPX, if symbol is missing, enter a custom symbol  ")
+custom_symbol = input( "GeoJSON to GPX, enter an optional Garmin symbol, e.g. Waypoint   : ")
 
 with open( sys.argv[1]+'.geojson', 'r') as infile:
    data = geojson.load ( infile )
-
-new = gpxpy.gpx.GPX()   #create a gpx object
 
 def get_property(properties, key, default='noname'):
     return properties.get(key) or properties.get(key.capitalize(), default)
@@ -83,15 +81,13 @@ def process_geometry(geom, properties, custom_symbol, gpx):
     elif geom_type == 'GeometryCollection':
         process_geometrycollection(geom, properties, custom_symbol, gpx)
 
-def process_features(data, custom_symbol):
-    gpx = gpxpy.gpx.GPX()
-    for feature in data['features']:
-        geom = feature['geometry']
-        properties = feature['properties']
-        process_geometry(geom, properties, custom_symbol, gpx)
-    return gpx
+# main()
+gpx = gpxpy.gpx.GPX()
+for feature in data['features']:
+    geom = feature['geometry']
+    properties = feature['properties']
+    process_geometry(geom, properties, custom_symbol, gpx)
 
-# Example usage
-gpxbucket = process_features(data, custom_symbol)
-print(gpxbucket.to_xml())
-
+with open(sys.argv[1]+'.gpx', 'w') as output_file:
+    output_file.write( gpx.to_xml() )
+print ( f"File saved as {sys.argv[1]+'.gpx'}")  
