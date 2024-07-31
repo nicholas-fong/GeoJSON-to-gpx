@@ -2,21 +2,28 @@
 # JOSM can export to GeoJSON format.
 # convert GeoJSON Points to gpx waypoints, add elevation if exists.
 # convert GeoJSON LineStrings to a gpx track, add elevation if exists.
-# convert GeoJSON Polygons to a waypoint (based on centroid of the polygon vertices), no elevation.
+# convert GeoJSON Polygons to a Waypoint (based on the centroid of the Polygon vertices), no elevation.
 
 import sys
 from statistics import mean
-import geojson
+import json
 import gpxpy.gpx
 
 if len(sys.argv) < 2:
-    print("Enter a GeoJSON file. Convert Points, LineStrings and Polygon (centroid) to GPX ") 
+    print("Enter a GeoJSON file ") 
     sys.exit(1)
+print("Special Note: Polygon, if exists, its centroid is mapped to Waypoint ") 
+custom_symbol = input( "Eenter an optional Garmin symbol, e.g. Waypoint   : ")
 
-custom_symbol = input( "GeoJSON to GPX, enter an optional Garmin symbol, e.g. Waypoint   : ")
-
-with open( sys.argv[1]+'.geojson', 'r') as infile:
-   data = geojson.load ( infile )
+try:
+    with open(sys.argv[1] + '.geojson', 'r') as infile:
+        data = json.load(infile)
+except FileNotFoundError:
+    print(f"Error: File {sys.argv[1]}.geojson not found.")
+    sys.exit(1)
+except json.JSONDecodeError:
+    print("Error: Failed to parse GeoJSON file.")
+    sys.exit(1)
 
 def get_property(properties, key, default='noname'):
     return properties.get(key) or properties.get(key.capitalize(), default)
@@ -88,6 +95,6 @@ for feature in data['features']:
     properties = feature['properties']
     process_geometry(geom, properties, custom_symbol, gpx)
 
-with open(sys.argv[1]+'.gpx', 'w') as output_file:
-    output_file.write( gpx.to_xml() )
+with open(sys.argv[1]+'.gpx', 'w') as outfile:
+    outfile.write( gpx.to_xml() )
 print ( f"File saved as {sys.argv[1]+'.gpx'}")  
