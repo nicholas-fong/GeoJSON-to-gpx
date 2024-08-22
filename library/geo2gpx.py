@@ -13,7 +13,7 @@ if len(sys.argv) < 2:
     print("Enter a GeoJSON file ") 
     sys.exit(1)
 print("Special Note: Polygon, if exists, its centroid is mapped to Waypoint ") 
-custom_symbol = input( "Eenter an optional Garmin symbol, e.g. Waypoint   : ")
+custom_symbol = input( "Eenter an optional Garmin symbol, e.g. Information / Restroom / Flag, Red  : ")
 
 try:
     with open(sys.argv[1] + '.geojson', 'r') as infile:
