@@ -32,7 +32,13 @@ def process_point(geom, properties, custom_symbol, gpx):
     node = geom['coordinates']
     new_wpt = gpxpy.gpx.GPXWaypoint()
     new_wpt.name = get_property(properties, 'name')
-    new_wpt.symbol = properties.get('sym', custom_symbol) if properties.get('sym') != 'empty' else custom_symbol
+
+    if properties.get('sym') == None :
+        if custom_symbol != "":
+            new_wpt.symbol = custom_symbol
+    else:
+        new_wpt.symbol = properties.get('sym')
+    
     new_wpt.latitude, new_wpt.longitude = node[1], node[0]
     if len(node) == 3:
         new_wpt.elevation = node[2]
