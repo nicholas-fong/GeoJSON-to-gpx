@@ -28,15 +28,23 @@ except FileNotFoundError:
     print("file not found")
     sys.exit(1) 
 
+custom_symbol = input( "Eenter an optional Garmin symbol, e.g. Information / Restroom / Flag, Red  : ")
+
 features = []    
 
 for waypoint in gpx.waypoints:
-    if waypoint.elevation:
+    if waypoint.elevation is not None:
         my_point = Point((waypoint.longitude, waypoint.latitude, int(waypoint.elevation)))
     else:
         my_point = Point((waypoint.longitude, waypoint.latitude))
 
-    feature = Feature(geometry=my_point, properties={"name":waypoint.name, "sym":waypoint.symbol})
+    if waypoint.symbol is not None:
+        feature = Feature(geometry=my_point, properties={"name":waypoint.name, "sym":waypoint.symbol})
+    else:
+        if (custom_symbol != "") :
+            feature = Feature(geometry=my_point, properties={"name":waypoint.name, "sym":custom_symbol})
+        else:
+            feature = Feature(geometry=my_point, properties={"name":waypoint.name})
     features.append(feature)    
 
 for route in gpx.routes: 
