@@ -38,13 +38,23 @@ for waypoint in gpx.waypoints:
     else:
         my_point = Point((waypoint.longitude, waypoint.latitude))
 
+    # Determine the symbol to use
     if waypoint.symbol is not None:
-        feature = Feature(geometry=my_point, properties={"name":waypoint.name, "sym":waypoint.symbol})
+        symbol = waypoint.symbol
+    elif custom_symbol != "":
+        symbol = custom_symbol
     else:
-        if (custom_symbol != "") :
-            feature = Feature(geometry=my_point, properties={"name":waypoint.name, "sym":custom_symbol})
-        else:
-            feature = Feature(geometry=my_point, properties={"name":waypoint.name})
+        symbol = None
+
+    # Create the properties dictionary
+    properties = {"name": waypoint.name}
+
+    # Add the symbol to properties if it's available
+    if symbol is not None:
+        properties["sym"] = symbol
+
+    # Create the feature
+    feature = Feature(geometry=my_point, properties=properties)
     features.append(feature)    
 
 for route in gpx.routes: 
